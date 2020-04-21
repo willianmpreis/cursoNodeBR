@@ -1,0 +1,12 @@
+{
+  "name": "nodejs-multi-bd",
+  "version": "1.0.0",
+  "description": "Projeto com Multi-banco, usando Docker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
