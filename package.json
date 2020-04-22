@@ -4,7 +4,7 @@
   "description": "Projeto com Multi-banco, usando Docker",
   "main": "index.js",
   "scripts": {
-    "test": "mocha *.test.js"
+    "test": "mocha src/tests/*.js"
   },
   "keywords": [],
   "author": "",

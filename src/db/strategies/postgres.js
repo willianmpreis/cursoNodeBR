@@ -55,10 +55,14 @@ class Postgres extends ICrud {
         await this._category.sync()
     }
 
-     async create(item) {
-         const {dataValues} = await this._category.create(item)
-         return dataValues
-     }
+    async create(item) {
+        const {dataValues} = await this._category.create(item)
+        return dataValues
+    }
+
+    async read(item = {}) {
+        return this._category.findAll({where: item, raw: true})
+    }
 }
 
 module.exports = Postgres
