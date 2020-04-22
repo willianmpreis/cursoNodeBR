@@ -6,10 +6,9 @@ class Postgres extends ICrud {
         super()
         this.driver = null
         this._category = null
-        this._connect()
     }
 
-    _connect() {
+    async connect() {
         this._driver = new Sequelize(
             'docker-postgres',
             'meuusuario',
@@ -21,6 +20,7 @@ class Postgres extends ICrud {
                 operatorAliases: false
             }
         )
+        await this.defineCategoryModel()
     }
 
     async isConnected() {
@@ -34,7 +34,7 @@ class Postgres extends ICrud {
     }
 
     async defineCategoryModel() {
-        this._category = driver.define('category', {
+        this._category = this._driver.define('category', {
             id: {
                 type: Sequelize.INTEGER,
                 require: true,
@@ -52,12 +52,13 @@ class Postgres extends ICrud {
             timestamps: false
         })
     
-        await Category.sync()
+        await this._category.sync()
     }
 
-    create(item) {
-        console.log('Item salvo em PostgreSQL')
-    }
+     async create(item) {
+         const {dataValues} = await this._category.create(item)
+         return dataValues
+     }
 }
 
 module.exports = Postgres
