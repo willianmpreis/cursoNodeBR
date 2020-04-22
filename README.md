@@ -2,7 +2,7 @@ docker network create my-network
 
 docker run \
     --name postgres \
-    -e POSTGRES_USER=willianreis \
+    -e POSTGRES_USER=meuusuario \
     -e POSTGRES_PASSWORD=minhasenha \
     -e POSTGRES_DB=docker-postgres \
     -p 5432:5432 \
@@ -39,4 +39,4 @@ docker run \
 
 docker exec -it mongodb \
     mongo --host localhost -u admin -p senhaadmin --authenticationDatabase admin \
-    --eval "db.getSiblingDB('docker-mongo').createUser({user: 'willianreis', pwd: 'minhasenha', roles: [{role:'readWrite', db: 'docker-mongo'}]})"
+    --eval "db.getSiblingDB('docker-mongo').createUser({user: 'usuario', pwd: 'minhasenha', roles: [{role:'readWrite', db: 'docker-mongo'}]})"
