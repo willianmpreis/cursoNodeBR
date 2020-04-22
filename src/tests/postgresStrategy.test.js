@@ -11,6 +11,7 @@ describe('Postgres Strategy', function () {
 
     this.beforeAll(async function() {
         await context.connect()
+        await context.delete()
         await context.create(MOCK_CATEGORY_UPDATE)
     })
     
@@ -43,5 +44,12 @@ describe('Postgres Strategy', function () {
         
         assert.deepEqual(result, 1)
         assert.deepEqual(updatedItem.description, newItem.description)
+    })
+
+    it('Remove with id', async function() {
+        const [item] = await context.read({description: MOCK_CATEGORY_CREATE.description})
+        const result = await context.delete(item.id)
+
+        assert.deepEqual(result, true)
     })
 })
