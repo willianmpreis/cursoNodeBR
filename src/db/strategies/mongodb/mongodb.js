@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose')
 
-const ICrud = require('./interfaces/interfaceCrud');
+const ICrud = require('./../interfaces/interfaceCrud');
 
 const STATUS = {
     0: 'Disconectado',
@@ -10,14 +10,14 @@ const STATUS = {
 }
 
 class MongoDB extends ICrud {
-    constructor() {
+    constructor(connection, schema) {
         super()
-        this._category = null
-        this._driver = null
+        this._schema = schema
+        this._connection = connection
     }
 
     async isConnected() {
-        const state = STATUS[this._driver.readyState]
+        const state = STATUS[this._connection.readyState]
 
         if (state === STATUS[1]) return state
 
@@ -25,45 +25,29 @@ class MongoDB extends ICrud {
         
         await new Promise(resolve => setTimeout(resolve, 1000))
 
-        return STATUS[this._driver.readState]
+        return STATUS[this._connection.readState]
     }
 
-    async connect() {
-        await Mongoose.connect('mongodb://usuario:minhasenha@localhost:27017/docker-mongo', {
+    static connect() {
+        
+        Mongoose.connect('mongodb://usuario:minhasenha@localhost:27017/docker-mongo', {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         }).catch(error => console.log('Falha na conexão!', error))
        
         
         const connection = Mongoose.connection
-        this._driver = connection
         connection.once('open', () => console.log('database rodando!!!')) //Executa uma unica vez
 
         // Mongoose.connection.on('error', err => {
         //     logError(err);
         //   });
 
-        this.defineModelCategory()
-    }
-
-    defineModelCategory()
-    {
-        const categoryScheme = Mongoose.Schema({
-            description: {
-                type: String,
-                require: true
-            },
-            insertedAt: {
-                type: Date,
-                default: new Date()
-            }
-        })
-
-        this._category = Mongoose.model('category', categoryScheme)
+        return connection
     }
 
     create(item) {
-        return this._category.create(item)
+        return this._schema.create(item)
     }
 
     /**
@@ -72,15 +56,15 @@ class MongoDB extends ICrud {
      * @param {*} limit //Limite por página
      */
     read(item, skip=0, limit=10) {
-        return this._category.find(item).skip(skip).limit(limit)
+        return this._schema.find(item).skip(skip).limit(limit)
     }
 
     update(id, item) {
-        return this._category.updateOne({_id: id}, {$set: item})
+        return this._schema.updateOne({_id: id}, {$set: item})
     }
 
     delete(id) {
-        return this._category.deleteOne({_id: id})
+        return this._schema.deleteOne({_id: id})
     }
 }
 

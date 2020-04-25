@@ -1,17 +1,18 @@
 const assert = require('assert')
-const Mongodb = require('../db/strategies/mongodb')
+const MongoDb = require('../db/strategies/mongodb/mongodb')
+const CategorySchema = require('../db/strategies/mongodb/schemas/categorySchema')
 const Context = require('../db/strategies/base/contextStrategy')
 
-const context = new Context(new Mongodb())
+let context = {}
 const MOCK_CATEGORY_DEFAULT = {description: `Category Default - ${Date.now()}`}
 const MOCK_CATEGORY_CREATE = {description: `New Category - ${Date.now()}`}
 const MOCK_CATEGORY_UPDATE = {description: `My Category - ${Date.now()}`}
-
 let MOCK_CATEGORY_UPDATE_ID = ''
 
 describe ('MongoDB Tests', function () {
     this.beforeAll(async function() {
-        await context.connect()
+        const conection = MongoDb.connect()
+        context = new Context(new MongoDb(conection, CategorySchema))
         await context.create(MOCK_CATEGORY_DEFAULT)
         const result = await context.create(MOCK_CATEGORY_UPDATE)
         MOCK_CATEGORY_UPDATE_ID =  result.id
