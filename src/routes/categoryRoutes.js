@@ -1,6 +1,10 @@
 const BaseRoute = require('./base/baseRoute')
 const Joi = require('@hapi/joi');
 
+const failAction = (request, headers, error) => {
+    throw error;
+}
+
 class HeroRoutes extends BaseRoute {
     constructor(db) {
         super()
@@ -13,13 +17,11 @@ class HeroRoutes extends BaseRoute {
             method: 'GET',
             options: {
                 validate: {
-                    failAction: (request, headers, error) => {
-                        throw error;
-                    },
+                    failAction: failAction,
                     query: Joi.object({
                        s: Joi.number().integer().default(0),
                        l: Joi.number().integer().default(10),
-                       d: Joi.string().min(3).max(100).default('')
+                       d: Joi.string().min(3).max(100)
                     })
                 }
             },
@@ -37,6 +39,31 @@ class HeroRoutes extends BaseRoute {
                     return 'Erro no servidor'
                 }
                 
+            }
+        }
+    }
+
+    create() {
+        return {
+            path: '/categories',
+            method: 'POST',
+            config: {
+                validate: {
+                    failAction,
+                    payload: Joi.object({
+                       description: Joi.string().required().min(3).max(100)
+                    })                    
+                }
+            },
+            handler: async (request) => {
+                try {
+                    const {description} = request.payload
+                    const result = await this.contextDb.create({description})
+                    return result;
+                } catch (error) {
+                    console.error(error)
+                    return 'Internal Error'
+                }
             }
         }
     }

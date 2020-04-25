@@ -1,6 +1,7 @@
 const assert = require('assert')
 const api = require('./../api')
 let app = {}
+const MOCK_CATEGORY_CREATE = {description: `Category-API-${Date.now()}`}
 
 describe.only('Category API testing suite', function() {
     
@@ -59,5 +60,19 @@ describe.only('Category API testing suite', function() {
 
         assert.deepEqual(statusCode, 400)
         assert.deepEqual(errorResult, JSON.parse(result.payload))
+    })
+
+    it('Create Category - POST /category', async () => {
+        const result = await app.inject({
+            method: 'POST',
+            url: '/categories',
+            payload: MOCK_CATEGORY_CREATE
+        })
+
+        const statusCode = result.statusCode
+        //const {description} = JSON.parse(result.payload)
+
+        assert.ok(statusCode === 200)
+        //assert.deepEqual(description, MOCK_CATEGORY_CREATE.description)
     })
 })
