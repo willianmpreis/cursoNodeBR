@@ -65,6 +65,15 @@ class MongoDB extends ICrud {
     async create(item) {
         return await this._category.create(item)
     }
+
+    /**
+     * @param {*} item 
+     * @param {*} skip  //Ignorar os 'skip' primeiros resultados
+     * @param {*} limit //Limite por página
+     */
+    async read(item, skip=0, limit=10) {
+        return await this._category.find(item).skip(skip).limit(limit)
+    }
 }
 
 module.exports = MongoDB
