@@ -1,16 +1,20 @@
 const assert = require('assert')
-const Postgres = require('../db/strategies/postgres')
-const Context = require('../db/strategies/base/contextStrategy')
+const Postgres = require('./../db/strategies/postgres/postgres')
+const Context = require('./../db/strategies/base/contextStrategy')
+const CategorySchema = require('./../db/strategies/postgres/schemas/categorySchema')
 
-const context = new Context(new Postgres())
 const MOCK_CATEGORY_CREATE = {description: 'New Category'}
 const MOCK_CATEGORY_UPDATE = {description: 'My Category'}
+
+let context = {}
 
 describe('Postgres Strategy', function () {
     this.timeout(Infinity)
 
     this.beforeAll(async function() {
-        await context.connect()
+        const connection = await Postgres.connect()
+        const model = await Postgres.defineModel(connection, CategorySchema)
+        context = new Context(new Postgres(connection, model))
         await context.delete()
         await context.create(MOCK_CATEGORY_UPDATE)
     })
