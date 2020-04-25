@@ -45,5 +45,11 @@ describe ('MongoDB Tests', function () {
 
         assert.deepEqual(result.nModified, 1)
     })
+
+    it ('Remove Category', async () => {
+        const result = await context.delete(MOCK_CATEGORY_UPDATE_ID)
+
+        assert.deepEqual(result.n, 1)
+    })
 })
 
