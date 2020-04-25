@@ -11,11 +11,17 @@ describe ('MongoDB Tests', function () {
         await context.connect()
     })
     
-    it.only('Check conection', async () => {
+    it('Check conection', async () => {
         const result = await context.isConnected()
         const expected = 'Conectado'
 
         assert.deepEqual(result, expected)
+    })
+
+    it('Create Category', async function() {
+        const {description} = await context.create(MOCK_CATEGORY_CREATE)
+        
+        assert.deepEqual({description}, MOCK_CATEGORY_CREATE)
     })
 })
 

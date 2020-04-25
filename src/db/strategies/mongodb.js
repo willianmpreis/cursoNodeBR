@@ -19,9 +19,9 @@ class MongoDB extends ICrud {
     async isConnected() {
         const state = STATUS[this._driver.readyState]
 
-        if (state === 'Conectado') return state
+        if (state === STATUS[1]) return state
 
-        if (state !== 'Conectando') return state
+        if (state !== STATUS[2]) return state
         
         await new Promise(resolve => setTimeout(resolve, 1000))
 
@@ -36,13 +36,14 @@ class MongoDB extends ICrud {
        
         
         const connection = Mongoose.connection
+        this._driver = connection
         connection.once('open', () => console.log('database rodando!!!')) //Executa uma unica vez
 
         // Mongoose.connection.on('error', err => {
         //     logError(err);
         //   });
 
-        this._driver = connection
+        this.defineModelCategory()
     }
 
     defineModelCategory()
@@ -62,9 +63,7 @@ class MongoDB extends ICrud {
     }
 
     async create(item) {
-        const resultCadastrar = await model.create(item)
-    
-        console.log('resultCadastrar', resultCadastrar)
+        return await this._category.create(item)
     }
 }
 
