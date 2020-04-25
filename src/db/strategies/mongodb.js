@@ -62,8 +62,8 @@ class MongoDB extends ICrud {
         this._category = Mongoose.model('category', categoryScheme)
     }
 
-    async create(item) {
-        return await this._category.create(item)
+    create(item) {
+        return this._category.create(item)
     }
 
     /**
@@ -71,8 +71,12 @@ class MongoDB extends ICrud {
      * @param {*} skip  //Ignorar os 'skip' primeiros resultados
      * @param {*} limit //Limite por página
      */
-    async read(item, skip=0, limit=10) {
-        return await this._category.find(item).skip(skip).limit(limit)
+    read(item, skip=0, limit=10) {
+        return this._category.find(item).skip(skip).limit(limit)
+    }
+
+    update(id, item) {
+        return this._category.updateOne({_id: id}, {$set: item})
     }
 }
 

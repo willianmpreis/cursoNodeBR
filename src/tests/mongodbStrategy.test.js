@@ -4,13 +4,17 @@ const Context = require('../db/strategies/base/contextStrategy')
 
 const context = new Context(new Mongodb())
 const MOCK_CATEGORY_DEFAULT = {description: `Category Default - ${Date.now()}`}
-const MOCK_CATEGORY_CREATE = {description: 'New Category'}
-const MOCK_CATEGORY_UPDATE = {description: 'My Category'}
+const MOCK_CATEGORY_CREATE = {description: `New Category - ${Date.now()}`}
+const MOCK_CATEGORY_UPDATE = {description: `My Category - ${Date.now()}`}
+
+let MOCK_CATEGORY_UPDATE_ID = ''
 
 describe ('MongoDB Tests', function () {
     this.beforeAll(async function() {
         await context.connect()
         await context.create(MOCK_CATEGORY_DEFAULT)
+        const result = await context.create(MOCK_CATEGORY_UPDATE)
+        MOCK_CATEGORY_UPDATE_ID =  result.id
     })
     
     it('Check conection', async () => {
@@ -32,6 +36,14 @@ describe ('MongoDB Tests', function () {
         const result = {description}
 
         assert.deepEqual(result, MOCK_CATEGORY_DEFAULT)
+    })
+
+    it ('Update Category', async () => {
+        const result = await context.update(MOCK_CATEGORY_UPDATE_ID, {
+            description: 'Updated Category'
+        })
+
+        assert.deepEqual(result.nModified, 1)
     })
 })
 
