@@ -6,7 +6,7 @@ const MOCK_CATEGORY_DEFAULT = {description: `Category-API-Default-${Date.now()}`
 const MOCK_CATEGORY_CREATE = {description: `Category-API-${Date.now()}`}
 let MOCK_CATEGORY_DEFAULT_ID = ''
 
-describe.only('Category API testing suite', function() {
+describe('Category API testing suite', function() {
     
     this.beforeAll(async () => {
         app = await api
@@ -118,5 +118,37 @@ describe.only('Category API testing suite', function() {
 
         assert.ok(statusCode === 200)
         assert.ok(data.nModified == 0)
+    })
+
+    it('Remove Category', async () => {
+        const _id = MOCK_CATEGORY_DEFAULT_ID
+        
+        const result = await app.inject({
+            method: 'DELETE',
+            url: `/categories/${_id}`
+        })
+
+        const statusCode = result.statusCode
+        const data = JSON.parse(result.payload);
+
+        assert.ok(statusCode === 200)
+        assert.ok(data.ok)
+        assert.ok(data.deletedCount > 0)
+    })
+
+    it('Not Remove Category', async () => {
+        const _id = MOCK_CATEGORY_DEFAULT_ID
+        
+        const result = await app.inject({
+            method: 'DELETE',
+            url: `/categories/${_id}`
+        })
+
+        const statusCode = result.statusCode
+        const data = JSON.parse(result.payload);
+
+        assert.ok(statusCode === 200)
+        assert.ok(data.ok)
+        assert.ok(data.deletedCount === 0)
     })
 })
