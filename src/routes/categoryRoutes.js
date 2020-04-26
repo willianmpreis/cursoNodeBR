@@ -67,6 +67,35 @@ class HeroRoutes extends BaseRoute {
             }
         }
     }
+
+    update() {
+        return {
+            path: '/categories/{id}',
+            method: 'PATCH',
+            config: {
+                validate: {
+                    failAction,
+                    payload: Joi.object({
+                       description: Joi.string().min(3).max(100)
+                    }),
+                    params: Joi.object({
+                        id: Joi.string().required()
+                    })               
+                }
+            },
+            handler: async (request) => {
+                try {                    
+                    const {id} = request.params
+                    const {description} = request.payload                    
+                    const result = await this.contextDb.update(id, {description})
+                    return result;
+                } catch (error) {
+                    console.error(error)
+                    return 'Internal Error'
+                }
+            }
+        }
+    }
 }
 
 module.exports = HeroRoutes
