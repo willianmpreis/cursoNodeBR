@@ -17,6 +17,9 @@ class HeroRoutes extends BaseRoute {
             path: '/categories',
             method: 'GET',
             options: {
+                tags: ['api'],
+                description: 'Deve listar categorias',
+                notes: 'Pode paginar resultados e filtrar por descrição',
                 validate: {
                     failAction: failAction,
                     query: Joi.object({
@@ -49,6 +52,9 @@ class HeroRoutes extends BaseRoute {
             path: '/categories',
             method: 'POST',
             config: {
+                tags: ['api'],
+                description: 'Deve cadastrar categorias',
+                notes: 'Deve cadastrar categoria por descrição',
                 validate: {
                     failAction,
                     payload: Joi.object({
@@ -74,6 +80,9 @@ class HeroRoutes extends BaseRoute {
             path: '/categories/{id}',
             method: 'PATCH',
             config: {
+                tags: ['api'],
+                description: 'Deve atualizar uma categoria por ID',
+                notes: 'Pode atualizar descrição da categoria por ID',
                 validate: {
                     failAction,
                     payload: Joi.object({
@@ -103,6 +112,9 @@ class HeroRoutes extends BaseRoute {
             path: '/categories/{id}',
             method: 'DELETE',
             config: {
+                tags: ['api'],
+                description: 'Deve remover uma categoria por ID',
+                notes: 'O ID deve ser válido',
                 validate: {
                     failAction,
                     params: Joi.object({
