@@ -137,7 +137,7 @@ describe('Category API testing suite', function() {
     })
 
     it('Not Remove Category', async () => {
-        const _id = MOCK_CATEGORY_DEFAULT_ID
+        const _id = '5aa4aaaa19306ca8d45eb627'
         
         const result = await app.inject({
             method: 'DELETE',

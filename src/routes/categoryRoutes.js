@@ -1,5 +1,6 @@
 const BaseRoute = require('./base/baseRoute')
-const Joi = require('@hapi/joi');
+const Joi = require('@hapi/joi'); //Validações
+const Boom = require('@hapi/boom') //Gerenciar e Formatar Erros
 
 const failAction = (request, headers, error) => {
     throw error;
@@ -36,7 +37,7 @@ class HeroRoutes extends BaseRoute {
                     return this.contextDb.read(query, parseInt(s), parseInt(l))
                 } catch (error) {
                     console.log(error)
-                    return 'Erro no servidor'
+                    return Boom.internal()
                 }
                 
             }
@@ -62,7 +63,7 @@ class HeroRoutes extends BaseRoute {
                     return result;
                 } catch (error) {
                     console.error(error)
-                    return 'Internal Error'
+                    return Boom.internal()
                 }
             }
         }
@@ -91,7 +92,7 @@ class HeroRoutes extends BaseRoute {
                     return result;
                 } catch (error) {
                     console.error(error)
-                    return 'Internal Error'
+                    return Boom.internal()
                 }
             }
         }
@@ -116,7 +117,7 @@ class HeroRoutes extends BaseRoute {
                     return result;
                 } catch (error) {
                     console.error(error)
-                    return 'Internal Error'
+                    return Boom.internal()
                 }
             }
         }
