@@ -11,8 +11,8 @@ let MOCK_CATEGORY_UPDATE_ID = ''
 
 describe('MongoDB Tests', function () {
     this.beforeAll(async function() {
-        const conection = await MongoDb.connect()
-        context = new Context(new MongoDb(conection, CategorySchema))
+        const connection = await MongoDb.connect()
+        context = new Context(new MongoDb(connection, CategorySchema))
         await context.create(MOCK_CATEGORY_DEFAULT)
         const result = await context.create(MOCK_CATEGORY_UPDATE)
         MOCK_CATEGORY_UPDATE_ID =  result.id

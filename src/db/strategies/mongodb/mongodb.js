@@ -29,7 +29,7 @@ class MongoDB extends ICrud {
     }
 
     static async connect() {        
-        Mongoose.connect(process.env.MONGODB_URL, {
+        await Mongoose.connect(process.env.MONGODB_URL, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         }).catch(error => console.log('Falha na conexão!', error))
