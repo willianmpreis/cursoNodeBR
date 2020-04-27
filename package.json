@@ -4,7 +4,9 @@
   "description": "Projeto com Multi-banco, usando Docker",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/tests/*.js"
+    "test": "mocha src/tests/*.js",
+    "test:prod": "cross-env NODE_ENV=prod mocha --timeout 10000 src/tests/*.js",
+    "prod": "cross-env NODE_ENV=prod mocha --timeout node api.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,7 @@
     "@hapi/joi": "^17.1.1",
     "@hapi/vision": "^6.0.0",
     "bcrypt": "^4.0.1",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "hapi-auth-jwt2": "^10.1.0",
     "hapi-swagger": "^13.0.0",
