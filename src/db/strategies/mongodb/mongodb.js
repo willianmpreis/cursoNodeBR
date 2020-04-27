@@ -28,7 +28,7 @@ class MongoDB extends ICrud {
         return STATUS[this._connection.readState]
     }
 
-    static connect() {
+    static async connect() {
         
         Mongoose.connect('mongodb://usuario:minhasenha@localhost:27017/docker-mongo', {
             useUnifiedTopology: true,
@@ -36,7 +36,7 @@ class MongoDB extends ICrud {
         }).catch(error => console.log('Falha na conexão!', error))
        
         
-        const connection = Mongoose.connection
+        const connection = await Mongoose.connection
         connection.once('open', () => console.log('database rodando!!!')) //Executa uma unica vez
 
         // Mongoose.connection.on('error', err => {

@@ -9,9 +9,9 @@ const MOCK_CATEGORY_CREATE = {description: `New Category - ${Date.now()}`}
 const MOCK_CATEGORY_UPDATE = {description: `My Category - ${Date.now()}`}
 let MOCK_CATEGORY_UPDATE_ID = ''
 
-describe ('MongoDB Tests', function () {
+describe('MongoDB Tests', function () {
     this.beforeAll(async function() {
-        const conection = MongoDb.connect()
+        const conection = await MongoDb.connect()
         context = new Context(new MongoDb(conection, CategorySchema))
         await context.create(MOCK_CATEGORY_DEFAULT)
         const result = await context.create(MOCK_CATEGORY_UPDATE)
