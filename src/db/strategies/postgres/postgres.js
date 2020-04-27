@@ -13,10 +13,10 @@ class Postgres extends ICrud {
             operatorAliases: false,
             logging: false,
             quateIdentifiers: false,
-            //ssl: process.env.SSL_DB,
-            //dialectOptions: {
-            //    ssl: process.env.SSL_DB
-            //}
+            ssl: process.env.SSL_DB,
+            dialectOptions: {
+                ssl: process.env.SSL_DB
+            }
         })
         return sequelize
     }
