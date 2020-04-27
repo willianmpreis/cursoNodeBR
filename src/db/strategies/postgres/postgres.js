@@ -9,18 +9,15 @@ class Postgres extends ICrud {
     }
 
     static async connect() {
-        const connection = new Sequelize(
-            'docker-postgres',
-            'meuusuario',
-            'minhasenha', 
-            {
-                host: 'localhost',
-                dialect: 'postgres',
-                quateIdentifiers: false,
-                operatorAliases: false,
-                logging: false
+        const connection = new Sequelize(process.env.POSTGRES_URL, {
+            operatorAliases: false,
+            logging: false,
+            quateIdentifiers: false,
+            ssl: process.env.SSL_DB,
+            dialectOptions: {
+                ssl: process.env.SSL_DB
             }
-        )
+        })
         return connection
     }
 

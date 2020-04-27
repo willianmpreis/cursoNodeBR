@@ -4,7 +4,7 @@ const {promisify} = require('util') //Para converter os callback em promisses
 
 const hashAsync = promisify(Bcrypt.hash)
 const compareAsync = promisify(Bcrypt.compare)
-const SALT = 3 //nível de complexidade
+const SALT = parseInt(process.env.SALT_PWD) //nível de complexidade
 
 class PasswordHelper{
     static hashPassword(pass) {

@@ -1,21 +1,33 @@
+const {config} = require('dotenv')
+const {join} = require('path')
+const {ok} = require('assert')
+
+const env = process.env.NODE_ENV || "dev"
+ok(env === "prod" || env === "dev", "Invalid .env")
+
+const configPah = join(__dirname, './config/', `.env.${env}`)
+config({
+    path: configPah
+})
+
 const Hapi = require('@hapi/hapi')
 const Vision = require('@hapi/vision')
 const Inert = require('@hapi/inert')
 const HapiSwagger = require('hapi-swagger')
 const HapiJWT = require('hapi-auth-jwt2')
 
-const Context = require('./db/strategies/base/contextStrategy')
-const MongoDb = require('./db/strategies/mongodb/mongodb')
-const Postgres = require('./db/strategies/postgres/postgres')
-const CategorySheme = require('./db/strategies/mongodb/schemas/categorySchema')
-const UserSheme = require('./db/strategies/postgres/schemas/userSchema')
-const CategoryRoute  = require('./routes/categoryRoutes')
-const AuthRoute = require('./routes/authRoutes')
+const Context = require('./src/db/strategies/base/contextStrategy')
+const MongoDb = require('./src/db/strategies/mongodb/mongodb')
+const Postgres = require('./src/db/strategies/postgres/postgres')
+const CategorySheme = require('./src/db/strategies/mongodb/schemas/categorySchema')
+const UserSheme = require('./src/db/strategies/postgres/schemas/userSchema')
+const CategoryRoute  = require('./src/routes/categoryRoutes')
+const AuthRoute = require('./src/routes/authRoutes')
 
-const JWT_SECRET = 'MY_SECRET_KEY'
+const JWT_SECRET = process.env.JWT_KEY
 
 const app = new Hapi.Server({
-    port:5000
+    port:process.env.PORT_HAPI
 })
 
 function mapRoutes(instance, methods) {

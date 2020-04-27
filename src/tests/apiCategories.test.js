@@ -1,5 +1,5 @@
 const assert = require('assert')
-const api = require('./../api')
+const api = require('./../../api')
 
 let app = {}
 const MOCK_CATEGORY_DEFAULT = {description: `Category-API-Default-${Date.now()}`}
