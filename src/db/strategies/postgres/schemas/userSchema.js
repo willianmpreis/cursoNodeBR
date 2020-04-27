@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
-const CategorySchema = {
-    name: 'category',
+const UserSchema = {
+    name: 'users',
     schema: {
         id: {
             type: Sequelize.INTEGER,
@@ -9,16 +9,21 @@ const CategorySchema = {
             primaryKey: true,
             autoIncrement: true
         },
-        description: {
+        username: {
+            type: Sequelize.STRING,
+            unique: true,
+            require: true
+        },
+        password: {
             type: Sequelize.STRING,
             require: true
         }
     },
     options: {
-        tableName: 'TB_CATEGORY',
+        tableName: 'TB_USER',
         freezeTableName: false,
         timestamps: false
     }
 }
 
-module.exports = CategorySchema
+module.exports = UserSchema

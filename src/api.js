@@ -6,7 +6,9 @@ const HapiJWT = require('hapi-auth-jwt2')
 
 const Context = require('./db/strategies/base/contextStrategy')
 const MongoDb = require('./db/strategies/mongodb/mongodb')
+const Postgres = require('./db/strategies/postgres/postgres')
 const CategorySheme = require('./db/strategies/mongodb/schemas/categorySchema')
+const UserSheme = require('./db/strategies/postgres/schemas/userSchema')
 const CategoryRoute  = require('./routes/categoryRoutes')
 const AuthRoute = require('./routes/authRoutes')
 
@@ -22,8 +24,12 @@ function mapRoutes(instance, methods) {
 
 async function main() {
     
-    const connection = MongoDb.connect()
-    const context = new Context(new MongoDb(connection, CategorySheme))
+    const connectionMongoDB = MongoDb.connect()
+    const contextMongoDB = new Context(new MongoDb(connectionMongoDB, CategorySheme))
+
+    const connectionPostgres = await Postgres.connect()
+    const userModel = await Postgres.defineModel(connectionPostgres, UserSheme)
+    const contextPostgres = new Context(new Postgres(connectionPostgres, userModel))
 
     const swaggerOptions = {
         info: {
@@ -49,7 +55,14 @@ async function main() {
         // options: {
         //     expiresIn: 20
         // },
-        validate: (data, request) => {
+        validate: async (data, request) => {
+            const [result] = await contextPostgres.read({
+                username: data.username.toLowerCase(),
+                id: data.id
+            })
+            if (!result) {
+                return {isValid: false}
+            }
             return {
                 isValid: true // caso nao valido false
             }
@@ -59,8 +72,8 @@ async function main() {
     app.auth.default('jwt')
 
     app.route([
-        ...mapRoutes(new CategoryRoute(context), CategoryRoute.methods()),
-        ...mapRoutes(new AuthRoute(JWT_SECRET), AuthRoute.methods())
+        ...mapRoutes(new CategoryRoute(contextMongoDB), CategoryRoute.methods()),
+        ...mapRoutes(new AuthRoute(JWT_SECRET, contextPostgres), AuthRoute.methods())
     ])
 
     await app.start()

@@ -14,7 +14,7 @@ class ICrud {
         throw new NotImplementedException()
     }
 
-    update(id, item) {
+    update(id, item, upsert=false) { //upsert: caso o registro nao exista no BD, ele o cria
         throw new NotImplementedException()
     }
 
