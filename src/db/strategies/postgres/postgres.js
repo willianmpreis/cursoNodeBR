@@ -3,22 +3,22 @@ const Sequelize = require('sequelize');
 
 class Postgres extends ICrud {
     constructor(connection, schema) {
-        super()
-        this._connection = connection
-        this._schema = schema
+        super();
+        this._connection = connection;
+        this._db = schema;
     }
 
     static async connect() {
-        const connection = new Sequelize(process.env.POSTGRES_URL, {
+        const sequelize = new Sequelize(process.env.POSTGRES_URL, {
             operatorAliases: false,
             logging: false,
             quateIdentifiers: false,
-            ssl: process.env.SSL_DB,
-            dialectOptions: {
-                ssl: process.env.SSL_DB
-            }
+            //ssl: process.env.SSL_DB,
+            //dialectOptions: {
+            //    ssl: process.env.SSL_DB
+            //}
         })
-        return connection
+        return sequelize
     }
 
     async isConnected() {
@@ -42,22 +42,22 @@ class Postgres extends ICrud {
     }
 
     async create(item) {
-        const {dataValues} = await this._schema.create(item)
+        const {dataValues} = await this._db.create(item)
         return dataValues
     }
 
     async read(item = {}) {
-        return this._schema.findAll({where: item, raw: true})
+        return this._db.findAll({where: item, raw: true})
     }
 
     async update(id, item, upsert=false) {
         const functionUpdate = upsert ? 'upsert' : 'update'
-        return this._schema[functionUpdate](item, {where: {id: id}})
+        return this._db[functionUpdate](item, {where: {id: id}})
     }
 
     async delete(id) {
         const query = id ? {id} : {}
-        return this._schema.destroy({where: query})
+        return this._db.destroy({where: query})
     }
 }
 
