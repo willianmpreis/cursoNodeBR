@@ -4,9 +4,9 @@
   "description": "Projeto com Multi-banco, usando Docker",
   "main": "index.js",
   "scripts": {
-    "test": "mocha src/tests/*.js",
-    "test:prod": "cross-env NODE_ENV=prod mocha --timeout 10000 src/tests/*.js",
-    "prod": "cross-env NODE_ENV=prod mocha --timeout node api.js"
+    "test": "mocha --timeout 10000 src/tests/*.js",
+    "test:prod": "cross-env NODE_ENV=prod npm t",
+    "prod": "cross-env NODE_ENV=prod node api.js"
   },
   "keywords": [],
   "author": "",
