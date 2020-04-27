@@ -6,6 +6,10 @@ const failAction = (request, headers, error) => {
     throw error;
 }
 
+const headers = Joi.object({
+    authorization: Joi.string().required()
+}).unknown()
+
 class HeroRoutes extends BaseRoute {
     constructor(db) {
         super()
@@ -26,7 +30,8 @@ class HeroRoutes extends BaseRoute {
                        s: Joi.number().integer().default(0),
                        l: Joi.number().integer().default(10),
                        d: Joi.string().min(3).max(100)
-                    })
+                    }),
+                    headers
                 }
             },
             handler: (request, head) => {
@@ -57,6 +62,7 @@ class HeroRoutes extends BaseRoute {
                 notes: 'Deve cadastrar categoria por descrição',
                 validate: {
                     failAction,
+                    headers,
                     payload: Joi.object({
                        description: Joi.string().required().min(3).max(100)
                     })                    
@@ -85,6 +91,7 @@ class HeroRoutes extends BaseRoute {
                 notes: 'Pode atualizar descrição da categoria por ID',
                 validate: {
                     failAction,
+                    headers,
                     payload: Joi.object({
                        description: Joi.string().min(3).max(100)
                     }),
@@ -117,6 +124,7 @@ class HeroRoutes extends BaseRoute {
                 notes: 'O ID deve ser válido',
                 validate: {
                     failAction,
+                    headers,
                     params: Joi.object({
                         id: Joi.string().required()
                     })               

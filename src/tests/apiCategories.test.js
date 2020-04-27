@@ -5,6 +5,11 @@ let app = {}
 const MOCK_CATEGORY_DEFAULT = {description: `Category-API-Default-${Date.now()}`}
 const MOCK_CATEGORY_CREATE = {description: `Category-API-${Date.now()}`}
 let MOCK_CATEGORY_DEFAULT_ID = ''
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8iLCJpZCI6MSwiaWF0IjoxNTg4MDEyMDAzfQ.GzhZjFTfLZBF4EvIKV7udNZB0lV8hHaWhAEf5FIcRG8'
+
+const headers = {
+    authorization: TOKEN
+}
 
 describe('Category API testing suite', function() {
     
@@ -13,6 +18,7 @@ describe('Category API testing suite', function() {
         const result = await app.inject({
             method: 'POST',
             url: '/categories',
+            headers,
             payload: MOCK_CATEGORY_DEFAULT
         })
         const data = JSON.parse(result.payload)
@@ -23,7 +29,8 @@ describe('Category API testing suite', function() {
         
         const result = await app.inject({
             method: 'GET',
-            url: '/categories'
+            url: '/categories',
+            headers,
         })
         
         const data = JSON.parse(result.payload)
@@ -37,7 +44,8 @@ describe('Category API testing suite', function() {
         const LIMIT = 5
         const result = await app.inject({
             method: 'GET',
-            url: `/categories?l=${LIMIT}`
+            url: `/categories?l=${LIMIT}`,
+            headers,
         })
 
         const data = JSON.parse(result.payload)
@@ -52,7 +60,8 @@ describe('Category API testing suite', function() {
         const LIMIT = 'NOT'
         const result = await app.inject({
             method: 'GET',
-            url: `/categories?l=${LIMIT}`
+            url: `/categories?l=${LIMIT}`,
+            headers,
         })
 
         const statusCode = result.statusCode
@@ -76,6 +85,7 @@ describe('Category API testing suite', function() {
         const result = await app.inject({
             method: 'POST',
             url: '/categories',
+            headers,
             payload: MOCK_CATEGORY_CREATE
         })
 
@@ -93,6 +103,7 @@ describe('Category API testing suite', function() {
         const result = await app.inject({
             method: 'PATCH',
             url: `/categories/${_id}`,
+            headers,
             payload: expected
         })
 
@@ -110,6 +121,7 @@ describe('Category API testing suite', function() {
         const result = await app.inject({
             method: 'PATCH',
             url: `/categories/${_id}`,
+            headers,
             payload: expected
         })
 
@@ -125,7 +137,8 @@ describe('Category API testing suite', function() {
         
         const result = await app.inject({
             method: 'DELETE',
-            url: `/categories/${_id}`
+            url: `/categories/${_id}`,
+            headers,
         })
 
         const statusCode = result.statusCode
@@ -141,7 +154,8 @@ describe('Category API testing suite', function() {
         
         const result = await app.inject({
             method: 'DELETE',
-            url: `/categories/${_id}`
+            url: `/categories/${_id}`,
+            headers,
         })
 
         const statusCode = result.statusCode
