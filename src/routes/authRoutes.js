@@ -3,6 +3,8 @@ const Joi = require('@hapi/joi'); //Validações
 const Boom = require('@hapi/boom') //Gerenciar e Formatar Erros
 const Jwt = require('jsonwebtoken')
 
+const PasswordHelper = require('../helpers/passwordHelper')
+
 const failAction = (request, headers, error) => {
     throw error;
 }
@@ -13,9 +15,10 @@ const USER = {
 }
 
 class AuthRoutes extends BaseRoute {
-    constructor(secret) {
+    constructor(secret, dbContext) {
         super()
         this._secret = secret
+        this._dbContext = dbContext
     }
     login() {
         return {
@@ -36,15 +39,31 @@ class AuthRoutes extends BaseRoute {
             },
             handler: async (request) => {
                 const {username, password} = request.payload
-                
-                if (username.toLowerCase() !== USER.username ||
-                    password !== USER.password) {
-                    return Boom.unauthorized()
+
+                const [user] = await this._dbContext.read({
+                    username:username.toLowerCase()
+                })
+
+                if (!user) {
+                    return Boom.unauthorized('User does not exist')
                 }
+
+                const match = await PasswordHelper.comparePassword(
+                    password,
+                    user.password
+                )
+                
+                if (!match) {
+                    return Boom.unauthorized('User or password invalid')
+                }
+                // if (username.toLowerCase() !== USER.username ||
+                //     password !== USER.password) {
+                //     return Boom.unauthorized()
+                // }
                 
                 const token = Jwt.sign({
                     username: username,
-                    id: 1
+                    id: user.id
                 }, this._secret)
                 
                 return {
