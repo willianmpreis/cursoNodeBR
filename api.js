@@ -23,6 +23,7 @@ const CategorySheme = require('./src/db/strategies/mongodb/schemas/categorySchem
 const UserSheme = require('./src/db/strategies/postgres/schemas/userSchema')
 const CategoryRoute  = require('./src/routes/categoryRoutes')
 const AuthRoute = require('./src/routes/authRoutes')
+const UtilRoutes = require('./src/routes/utilRoutes')
 
 const JWT_SECRET = process.env.JWT_KEY
 
@@ -85,7 +86,8 @@ async function main() {
 
     app.route([
         ...mapRoutes(new CategoryRoute(contextMongoDB), CategoryRoute.methods()),
-        ...mapRoutes(new AuthRoute(JWT_SECRET, contextPostgres), AuthRoute.methods())
+        ...mapRoutes(new AuthRoute(JWT_SECRET, contextPostgres), AuthRoute.methods()),
+        ...mapRoutes(new UtilRoutes(), UtilRoutes.methods())        
     ])
 
     await app.start()
