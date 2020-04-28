@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "npm i -g pm2",
-    "test": "mocha --timeout 10000 src/tests/*.js",
+    "postinstall": "cross-env NODE_ENV=prod npm t",
+    "test": "nyc --reporter=html mocha --timeout 10000 --exit src/tests/*.js",
     "test:prod": "cross-env NODE_ENV=prod npm t",
     "prod": "cross-env NODE_ENV=prod node api.js",
     "start": "cross-env NODE_ENV=prod pm2-runtime api.js"
@@ -32,6 +33,7 @@
     "sequelize": "^5.21.6"
   },
   "devDependencies": {
-    "mocha": "^7.1.1"
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.1"
   }
 }
